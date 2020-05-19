@@ -144,32 +144,33 @@
                     "auth"
                 ],
                 "description": "Cadastro do usuário",
-                "parameters": [
-                    {
-                        "name": "Register",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "required": [
-                                "nome",
-                                "email",
-                                "password"
-                            ],
-                            "properties": {
-                                "nome": {
-                                    "type": "string"
-                                },
-                                "email": {
-                                    "type": "string"
-                                },
-                                "password": {
-                                    "type": "string"
+                "requestBody":{
+                    "description": "Nome, email e senha para registrar o usuário",
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "nome",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -224,28 +225,29 @@
                     "auth"
                 ],
                 "description": "Login de acesso",
-                "parameters": [
-                    {
-                        "name": "Login",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "required": [
-                                "email",
-                                "password"
-                            ],
-                            "properties": {
-                                "email": {
-                                    "type": "string"
-                                },
-                                "password": {
-                                    "type": "string"
+                "requestBody":{
+                    "description": "Email e senha do usuário",
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "OK",
