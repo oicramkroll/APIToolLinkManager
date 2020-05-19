@@ -58,7 +58,7 @@ module.exports = {
             data.password_reset_token = undefined;
             data.password_reset_expiries = undefined;
             
-            res.header("X-TOKEN",token);
+            res.header("X-TOKEN",generateToken({id:data.id}));
             return res.json(data)
         } catch (error) {
             console.log(error)

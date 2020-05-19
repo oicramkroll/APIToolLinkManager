@@ -21,14 +21,7 @@
                     "bearerAuth":[]
                 }],
                 "parameters": [
-                    {
-                        "name": "Authorization",
-                        "in":"header",
-                        "required":true,
-                        "schema":{
-                            "type": "string"
-                        }
-                    },
+                    
                     {
                         "name": "tag",
                         "in": "query",
@@ -41,6 +34,16 @@
                 "responses": {
                     "200": {
                         "description": "OK"
+                    },
+                    "403":{
+                        "description": "error on search",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 }
             }
