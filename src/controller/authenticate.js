@@ -54,6 +54,7 @@ module.exports = {
             res.header("X-TOKEN",token);
             return res.json(data)
         } catch (error) {
+            console.log(error)
             return res.json(error);
         }
         
