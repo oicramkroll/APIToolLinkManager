@@ -21,14 +21,23 @@ module.exports = {
     register: async (req,res)=>{
         try {
             let user = req.body;
+            const userMail = await prismaConn.users.findOne({
+                where:{
+                    email:user.email
+                }
+            });
+            if(userMail) 
+                return res.status(403).send({error:"Exist a user with this email"});
+
             user.password = await bcrypt.hash(user.password,10);
-            const userId =  await prismaConn.users.create({
-                data:user,select:id
-            })
-            res.header("X-TOKEN",generateToken({userId}));
-            return res.json({userId});
+            const {id} =  await prismaConn.users.create({
+                data:user
+            });
+            res.header("X-TOKEN",generateToken({id}));
+            return res.json({id});
         } catch (err) {
-            res.status(401).send(err)
+            console.log(error)
+            res.status(401).send({error:"error on register user"})
         }
         
     },
@@ -48,8 +57,6 @@ module.exports = {
             data.password = undefined;
             data.password_reset_token = undefined;
             data.password_reset_expiries = undefined;
-            const token = generateToken({id:data.id});
-            data.token = token;
             
             res.header("X-TOKEN",token);
             return res.json(data)
@@ -73,12 +80,14 @@ module.exports = {
             const token = crypto.randomBytes(20).toString('hex');
             const now = new Date();
             now.setHours(now.getHours() +1);
-
-            await connection('users')
-            .where('email',email)
-            .update({
-                'password_reset_token':token,
-                'password_reset_expiries':now
+            await prismaConn.users.update({
+                where:{
+                    email:email
+                },
+                data:{
+                    password_reset_expiries:now,
+                    password_reset_token:token
+                }
             });
             
             const resEmail =  await mailer.sendMail({
@@ -89,10 +98,10 @@ module.exports = {
                 context:{token}
             }); 
             
-            return res.json({resEmail});
+            return res.send();
             
         } catch (error) {
-            return res.status(401).send({error});
+            return res.status(401).send({error:error.response});
         }
 
         
@@ -111,11 +120,15 @@ module.exports = {
             return res.status(401).send({error:'Token expiries'});
 
         const passwordCrypted = await bcrypt.hash(password,10);
-        await connection('users')
-            .where('email',email)
-            .update({
-                password : passwordCrypted
-            });
+        await prismaConn.users.update({
+            where:{
+                email:email
+            },
+            data:{
+                password:passwordCrypted
+            }
+        })
+       
         return res.send();
         
     }

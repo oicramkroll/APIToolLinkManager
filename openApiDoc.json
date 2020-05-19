@@ -1,12 +1,335 @@
 {
-    "swagger":"2.0",
+    "openapi": "3.0.0",
     "info": {
-        "title":"API Title",
-        "version":"1.0"
+        "version": "1.0.0",
+        "title": "Tool Link Manager"
     },
-    "host": "api.server.test",
-    "basePath": "/",
-    "schemes": ["https"],   
+    "servers": [
+        {
+            "url": "https://toollinkmanager.herokuapp.com"
+        }
+    ],
     "paths": {
+        "/tools": {
+            "get": {
+                "tags": [
+                    "tools"
+                ],
+                
+                "description": "Lista as ferramentas possiblitando a busca por tags",
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in":"header",
+                        "required":true,
+                        "schema":{
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tag",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/auth/resetpassword": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Define uma nova senha do usuário a partir de um token de acesso",
+                "parameters": [
+                    {
+                        "name": "resetpassword",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "email",
+                                "token",
+                                "password"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                },
+                                "token": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Validate user email and token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/forgotpassword": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Recuperar a senha do usuário",
+                "parameters": [
+                    {
+                        "name": "forgotpassword",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "email"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Email not exist or not possible send email, check email paramters, host, post, user, password",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Cadastro do usuário",
+                "parameters": [
+                    {
+                        "name": "Register",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "nome",
+                                "email",
+                                "password"
+                            ],
+                            "properties": {
+                                "nome": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "X-Token": {
+                                "description": "token Bearer para acessar rotas privadas",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "format": "int32"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Email exist to another user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Erro on register",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/authenticate": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Login de acesso",
+                "parameters": [
+                    {
+                        "name": "Login",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "email",
+                                "password"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "X-Token": {
+                                "description": "token Bearer para acessar rotas privadas",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "format": "int32"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "incorrect password",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "problem on data base connection",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+   
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "description": "Bearer token [Bearer ???]",
+                "name": "Bearer"
+            }
+        },
+        "schemas": {
+            "Error": {
+                "type": "object",
+                "required": [
+                    "error"
+                ],
+                "properties": {
+                    "error": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
     }
 }
