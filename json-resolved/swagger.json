@@ -1,5 +1,5 @@
 {
-  "openapi" : "3.0.0",
+  "openapi" : "3.0.1",
   "info" : {
     "title" : "Tool Link Manager",
     "version" : "1.0-oas3"
