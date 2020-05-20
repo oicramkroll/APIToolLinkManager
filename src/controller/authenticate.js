@@ -25,8 +25,6 @@ module.exports = {
                 where:{
                     email:user.email
                 }
-            }).catch(err =>{
-                console.log(err);
             });
             if(userMail) 
                 return res.status(403).send({error:"Exist a user with this email"});
@@ -34,8 +32,6 @@ module.exports = {
             user.password = await bcrypt.hash(user.password,10);
             const {id} =  await prismaConn.users.create({
                 data:user
-            }).catch(err =>{
-                console.log(err);
             });
             res.header("X-TOKEN",generateToken({id}));
             return res.json({id});

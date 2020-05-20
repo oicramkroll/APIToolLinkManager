@@ -6,17 +6,21 @@ module.exports = {
             const links = await prismaConn.links.findMany({
                 where: tag && {
                     tags:{
-                    some:{name:tag}
+                        some:{name:tag},
                     }
                 },
                 include:{
-                    tags:true
+                    tags:{
+                        select:{
+                            name:true
+                        }
+                    }
                 }
             })
-            res.json(links);
+            return res.json(links);
         } catch (error) {
             console.log(error);
-            res.status(403).send({error:'error on search'});
+            return res.status(403).send({error:'error on search'});
         }
     },
     createTool: async(req,res)=>{
@@ -25,13 +29,19 @@ module.exports = {
             const {tags} = req.body
             tool.tags = {create:tags.map(tag => ({name:tag}))}
             const resp = await prismaConn.links.create({
-                data:tool
+                data:tool,
+                include:{
+                    tags:{
+                        select:{
+                            name:true
+                        }
+                    }
+                }
             }); 
-            resp.tags = tags;
-            res.status(201).json(resp);
+            return res.status(201).json(resp);
         } catch (error) {
             console.log(error);
-            res.status(403).send({error:'error on create'});
+            return res.status(403).send({error:'error on create'});
         }
     },
     deleteTool: async(req,res)=>{
@@ -39,10 +49,10 @@ module.exports = {
             const {id} = req.params;
             await prismaConn.tag.deleteMany({where:{idLink:parseInt(id)}})
             await prismaConn.links.delete({where:{id:parseInt(id)}})
-            res.status(204).send();
+            return res.status(204).send();
         } catch (error) {
             console.log(error);
-            res.status(403).send({error:'error on delete'});
+            return res.status(403).send({error:'error on delete'});
         }
         
     }

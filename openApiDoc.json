@@ -11,17 +11,69 @@
     ],
     "paths": {
         "/tools": {
+            "delete": {
+                "tags": ["tools"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "description":"Exclui uma ferramenta pelo id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Id unico da ferramenta que deseja ecluir",
+                        "schema":{
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["tools"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "description":"Inclui uma nova ferramenta",
+                "requestBody":{
+                    "description": "Inclui uma ferramenta com tags",
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "$ref":"#/components/schemas/tools"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/tools"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "get": {
                 "tags": [
                     "tools"
                 ],
-                
                 "description": "Lista as ferramentas possiblitando a busca por tags",
                 "security": [{
                     "bearerAuth":[]
                 }],
                 "parameters": [
-                    
                     {
                         "name": "tag",
                         "in": "query",
@@ -33,7 +85,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref":"#/components/schemas/listTool"
+                                }
+                            }
+                        }
                     },
                     "403":{
                         "description": "error on search",
@@ -54,32 +113,33 @@
                     "auth"
                 ],
                 "description": "Define uma nova senha do usuário a partir de um token de acesso",
-                "parameters": [
-                    {
-                        "name": "resetpassword",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "object",
-                            "required": [
-                                "email",
-                                "token",
-                                "password"
-                            ],
-                            "properties": {
-                                "email": {
-                                    "type": "string"
-                                },
-                                "token": {
-                                    "type": "string"
-                                },
-                                "password": {
-                                    "type": "string"
+                "requestBody":{
+                    "description": "Utiliza o token que foi enviado por email para possibilitar o cadastro da nova senha",
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "email",
+                                    "token",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "token": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -102,25 +162,26 @@
                 "tags": [
                     "auth"
                 ],
-                "description": "Recuperar a senha do usuário",
-                "parameters": [
-                    {
-                        "name": "forgotpassword",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "required": [
-                                "email"
-                            ],
-                            "properties": {
-                                "email": {
-                                    "type": "string"
+                "description": "Recuperar a senha do usuário. É ncessario configurar as variaveis de ambiente para o envio do email.",
+                "requestBody":{
+                    "description": "Envia o token para o email cadastrado",
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    }
                                 }
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -152,12 +213,12 @@
                             "schema": {
                                 "type": "object",
                                 "required": [
-                                    "nome",
+                                    "name",
                                     "email",
                                     "password"
                                 ],
                                 "properties": {
-                                    "nome": {
+                                    "name": {
                                         "type": "string"
                                     },
                                     "email": {
@@ -320,10 +381,45 @@
                 "type": "apiKey",
                 "in": "header",
                 "description": "Bearer token [Bearer ???]",
-                "name": "Bearer"
+                "name": "Authorization"
             }
         },
         "schemas": {
+            "tools":{
+                "type": "object",
+                "properties": {
+                    "id":{
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "title":{
+                        "type": "string"
+                    },
+                    "link":{
+                        "type": "string"
+                    },
+                    "description":{
+                        "type": "string"
+                    },
+                    "tags":{
+                        "type": "array",
+                        "items":{
+                            "type": "object",
+                            "properties": {
+                                "name":{
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "listTool":{
+                "type": "array",
+                "items":{
+                    "$ref":"#/components/schemas/tools"
+                }
+            },
             "Error": {
                 "type": "object",
                 "required": [
