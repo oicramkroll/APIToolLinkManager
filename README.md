@@ -1,8 +1,8 @@
 # Tool link manager
 
-Projeto para gerênciamento de links de ferramentas, seguida de pesquisa de tags.
+Projeto para gerenciamento de links de ferramentas, seguida de pesquisa de tags.
 
-Para gerênciar os links é necessário efetuar a autenticação vai JWT.
+Para gerenciar os links é necessário efetuar a autenticação vai JWT.
 
 ## banco de dados e migrations.
 Foi utilizado o sqlite para facil implementação mas pode ser utilizado qualquer banco por que utilizo o prisma 2 para gerar as migrations.
@@ -17,10 +17,9 @@ Foi utilizado o sqlite para facil implementação mas pode ser utilizado qualque
 
     DATABASE_URL
 
- 
 ## Instalação do projeto 
 
-crie um arquivo <code>.env</code> e informe as variaveis de ambiente citadas no topico anterior e execute os segintes comandos:
+crie um arquivo <code>.env</code> na pasta raiz do projeto e informe as variaveis de ambiente citadas no topico anterior e execute os segintes comandos:
 
     npm install
     npm install @prisma/cli --save-dev
@@ -34,3 +33,7 @@ crie um arquivo <code>.env</code> e informe as variaveis de ambiente citadas no 
 [node mailer](https://nodemailer.com/about/)
 
 [Prisma 2](https://nodemailer.com/about/)
+
+## Documentação da API
+[OpenApi 3 - SwaggerHub](https://app.swaggerhub.com/apis/oicramkroll/api-title/1.0-oas3)
+
