@@ -25,6 +25,8 @@ module.exports = {
                 where:{
                     email:user.email
                 }
+            }).catch(err =>{
+                console.log(err);
             });
             if(userMail) 
                 return res.status(403).send({error:"Exist a user with this email"});
@@ -39,7 +41,7 @@ module.exports = {
             return res.json({id});
         } catch (err) {
             console.log(error)
-            res.status(401).send({error:"error on register user"})
+            return res.status(401).send({error:"error on register user"})
         }
         
     },
@@ -109,29 +111,34 @@ module.exports = {
         
     },
     resetPassword:async(req,res)=>{
-        const {email,token,password} = req.body;
-        const user = await prismaConn.users.findOne({
-            where:{email:email}
-        });
-            
-        if(!user)
-            return res.status(401).send({error:'Not exists user whit this email'});
-        if(token!== user.password_reset_token)
-            return res.status(401).send({error:'Token is not valid.'});
-        if(new Date() > user.password_reset_expiries)
-            return res.status(401).send({error:'Token expiries'});
+        try {
+            const {email,token,password} = req.body;
+            const user = await prismaConn.users.findOne({
+                where:{email:email}
+            });
+                
+            if(!user)
+                return res.status(401).send({error:'Not exists user whit this email'});
+            if(token!== user.password_reset_token)
+                return res.status(401).send({error:'Token is not valid.'});
+            if(new Date() > user.password_reset_expiries)
+                return res.status(401).send({error:'Token expiries'});
 
-        const passwordCrypted = await bcrypt.hash(password,10);
-        await prismaConn.users.update({
-            where:{
-                email:email
-            },
-            data:{
-                password:passwordCrypted
-            }
-        })
-       
-        return res.send();
+            const passwordCrypted = await bcrypt.hash(password,10);
+            await prismaConn.users.update({
+                where:{
+                    email:email
+                },
+                data:{
+                    password:passwordCrypted
+                }
+            })
+        
+            return res.send();
+        } catch (error) {
+            return res.status(500).send({error:'internall erro, see log'});
+        }
+        
         
     }
 }
