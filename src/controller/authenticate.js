@@ -39,7 +39,7 @@ module.exports = {
             });
             res.header("X-TOKEN",generateToken({id}));
             return res.json({id});
-        } catch (err) {
+        } catch (error) {
             console.log(error)
             return res.status(401).send({error:"error on register user"})
         }
