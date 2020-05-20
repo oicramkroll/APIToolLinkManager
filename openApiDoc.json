@@ -10,7 +10,7 @@
         }
     ],
     "paths": {
-        "/tools": {
+        "/tools/{id}": {
             "delete": {
                 "tags": ["tools"],
                 "security": [{
@@ -20,9 +20,9 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "path",
+                        "description": "id da ferramenta que será ecluida jundamente com suas tags",
                         "required": true,
-                        "description": "Id unico da ferramenta que deseja ecluir",
+                        "in": "path",
                         "schema":{
                             "type": "integer",
                             "format": "int32"
@@ -30,11 +30,23 @@
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "204": {
                         "description": "OK"
+                    },
+                    "403":{
+                        "description": "RecordNotFound",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref":"#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 }
-            },
+            }
+        },
+        "/tools": {
             "post": {
                 "tags": ["tools"],
                 "security": [{
