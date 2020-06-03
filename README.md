@@ -4,6 +4,8 @@ Projeto para gerenciamento de links de ferramentas, seguida de pesquisa de tags.
 
 Para gerenciar os links é necessário efetuar a autenticação vai JWT.
 
+Projeto em APIRestful
+
 ## banco de dados e migrations.
 Foi utilizado o sqlite para facil implementação mas pode ser utilizado qualquer banco por que utilizo o prisma 2 para gerar as migrations.
 
