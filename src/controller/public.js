@@ -1,7 +1,7 @@
 const prismaConn = require('../../prisma/connection');
 module.exports = {
     home:(req,res)=>{
-        res.json({ok:`Gerenciador links acesse ${process.env.GIT_URL}`})
+        res.json({ok:`Gerenciador de links. para mais detalhes acesse: ${process.env.GIT_URL}`})
     },
     getLink: async (req,res)=>{
         try {
