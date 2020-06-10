@@ -21,6 +21,8 @@ const privateConfig = celebrate({
 routes.get('/tools/:tag?',privateConfig,auth,controller.private.tools);
 routes.post('/tools',privateConfig,auth,controller.private.createTool);
 routes.delete('/tools/:id',privateConfig,auth,controller.private.deleteTool);
+routes.get('/link/:id',controller.public.getLink);
+routes.get('/links/:tag?',controller.public.getAllLinks);
 
 routes.get('/',controller.public.home);
 
