@@ -54,6 +54,5 @@ module.exports = {
             console.log(error);
             return res.status(403).send({error:'error on delete'});
         }
-        
     }
 }
