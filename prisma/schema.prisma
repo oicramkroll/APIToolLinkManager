@@ -12,7 +12,7 @@ model links {
   id          Int    @default(autoincrement()) @id
   link        String
   title       String
-  tags         tag[]
+  tag         tag[]
 }
 
 model tag {
