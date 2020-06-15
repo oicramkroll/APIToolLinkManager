@@ -5,12 +5,12 @@ module.exports = {
             const  {tag}= req.query;
             const links = await prismaConn.links.findMany({
                 where: tag && {
-                    tags:{
+                    tag:{
                         some:{name:tag},
                     }
                 },
                 include:{
-                    tags:{
+                    tag:{
                         select:{
                             name:true
                         }
@@ -25,13 +25,14 @@ module.exports = {
     },
     createTool: async(req,res)=>{
         try {
-            const tool = {title,link,description} = req.body;
-            const {tags} = req.body
-            tool.tags = {create:tags.map(tag => ({name:tag}))}
+            const {title,link,description} = req.body;
+            const tool = {title,link,description};
+            const {tags} = req.body;
+            tool.tag = {create:tags.map(tag => ({name:tag}))}
             const resp = await prismaConn.links.create({
                 data:tool,
                 include:{
-                    tags:{
+                    tag:{
                         select:{
                             name:true
                         }
@@ -40,7 +41,7 @@ module.exports = {
             }); 
             return res.status(201).json(resp);
         } catch (error) {
-            console.log(error);
+            console.log({error});
             return res.status(403).send({error:'error on create'});
         }
     },

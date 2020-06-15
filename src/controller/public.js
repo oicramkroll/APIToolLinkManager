@@ -19,12 +19,12 @@ module.exports = {
             const  {tag}= req.query;
             const links = await prismaConn.links.findMany({
                 where: tag && {
-                    tags:{
+                    tag:{
                         some:{name:tag},
                     }
                 },
                 include:{
-                    tags:{
+                    tag:{
                         select:{
                             name:true
                         }

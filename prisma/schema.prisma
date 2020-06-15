@@ -4,7 +4,22 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      =  env("DATABASE_URL")
+  url      = env("DATABASE_URL")
+}
+
+model links {
+  description String
+  id          Int    @default(autoincrement()) @id
+  link        String
+  title       String
+  tag         tag[]
+}
+
+model tag {
+  id     Int    @default(autoincrement()) @id
+  idLink Int
+  name   String
+  links  links  @relation(fields: [idLink], references: [id])
 }
 
 model users {
@@ -14,20 +29,4 @@ model users {
   password                String
   password_reset_expiries String?
   password_reset_token    String?
-}
-
-model links{
-  id Int @default(autoincrement()) @id
-  title                  String
-  link                  String
-  description           String 
-  tags tag[]
-}
-
-model tag{
-  id Int @default(autoincrement()) @id
-  name String
-  link links @relation(fields:  [idLink], references: [id])
-  idLink Int
-
 }
