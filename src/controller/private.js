@@ -5,12 +5,12 @@ module.exports = {
             const  {tag}= req.query;
             const links = await prismaConn.links.findMany({
                 where: tag && {
-                    tag:{
+                    tags:{
                         some:{name:tag},
                     }
                 },
                 include:{
-                    tag:{
+                    tags:{
                         select:{
                             name:true
                         }
@@ -28,11 +28,11 @@ module.exports = {
             const {title,link,description} = req.body;
             const tool = {title,link,description};
             const {tags} = req.body;
-            tool.tag = {create:tags.map(tag => ({name:tag}))}
+            tool.tags = {create:tags.map(tag => ({name:tag}))}
             const resp = await prismaConn.links.create({
                 data:tool,
                 include:{
-                    tag:{
+                    tags:{
                         select:{
                             name:true
                         }
