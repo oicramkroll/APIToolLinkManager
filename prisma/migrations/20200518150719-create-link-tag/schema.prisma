@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url = "***"
+  url = env("DATABASE_URL")
 }
 
 model users {
@@ -21,7 +21,7 @@ model links{
   title                  String
   link                  String
   description           String 
-  tags tag[]
+  tag tag[]
 }
 
 model tag{
