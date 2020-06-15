@@ -33,6 +33,7 @@ module.exports = {
             })
             return res.json(links);
         } catch (error) {
+            console.log("### error prisma ###");
             console.log({error});
             return res.status(403).send({error:'link not Found or invalid parameters'});
         }
